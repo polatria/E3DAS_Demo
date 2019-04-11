@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-public class Demo : MonoBehaviour
-{
+public class Demo : MonoBehaviour {
   public GameObject[] txtObject;
   private AzimuthText aziTxt;
   private MethodText mthTxt;
@@ -17,8 +16,9 @@ public class Demo : MonoBehaviour
   int file;
   string[] soundfile = { "wn/", "marimba/" };
 
-  void Awake()
-  {
+  float time;
+
+  void Awake() {
     aziTxt = txtObject[0].GetComponent<AzimuthText>();
     mthTxt = txtObject[1].GetComponent<MethodText>();
     sndTxt = txtObject[2].GetComponent<SoundText>();
@@ -26,8 +26,7 @@ public class Demo : MonoBehaviour
   }
 
   // Use this for initialization
-  void Start()
-  {
+  void Start() {
     set = 0;
     file = 0;
     azi = 0;
@@ -35,70 +34,64 @@ public class Demo : MonoBehaviour
     source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
     source.Play();
   }
-	
-	// Update is called once per frame
-	void Update()
-  {
+
+  // Update is called once per frame
+  void Update() {
     aziTxt.azimuth = azi * AZISTEP;
     mthTxt.method = set;
     sndTxt.sound = file;
 
-    if (Input.GetKeyDown(KeyCode.LeftArrow))
-    {
-      if (azi > 0)
-      {
+    if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+      if (azi > 0) {
         azi--;
+        time = source.time;
         source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
+        source.time = time;
         source.Play();
-      }
-      else
-      {
+      } else {
         azi = 360 / AZISTEP - 1;
+        time = source.time;
         source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
+        source.time = time;
         source.Play();
       }
     }
-    if (Input.GetKeyDown(KeyCode.RightArrow))
-    {
-      if (azi < 360 / AZISTEP - 1)
-      {
+    if (Input.GetKeyDown(KeyCode.RightArrow)) {
+      if (azi < 360 / AZISTEP - 1) {
         azi++;
+        time = source.time;
         source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
+        source.time = time;
         source.Play();
-      }
-      else
-      {
+      } else {
         azi = 0;
+        time = source.time;
         source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
+        source.time = time;
         source.Play();
       }
     }
 
-    if (Input.GetKeyDown(KeyCode.F))
-    {
-      if (file == 0)
-      {
+    if (Input.GetKeyDown(KeyCode.F)) {
+      if (file == 0) {
         file = 1;
-      }
-      else
-      {
+      } else {
         file = 0;
       }
       source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
+      source.time = 0;
       source.Play();
     }
 
-    if (Input.GetKeyDown(KeyCode.Space))
-    {
-      if (set == 0)
-      {
+    if (Input.GetKeyDown(KeyCode.Space)) {
+      if (set == 0) {
         set = 1;
-      }
-      else
-      {
+      } else {
         set = 0;
       }
+      time = source.time;
       source.clip = Resources.Load<AudioClip>(dataset[set] + soundfile[file] + azi.ToString());
+      source.time = time;
       source.Play();
     }
   }
